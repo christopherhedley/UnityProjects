@@ -8,15 +8,20 @@ public class PlayerController : MonoBehaviour {
     public float speed;
     public Text countText;
     public Text winText;
+    public Text scoreText;
+
 
     private Rigidbody rb;
     private int count;
+    private int score;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         count = 0;
+        score = 0;
         SetCountText ();
+        SetScoreText ();
         winText.text = "";
     }
 
@@ -41,17 +46,31 @@ public class PlayerController : MonoBehaviour {
         if (other.gameObject.CompareTag("Pick Up"))
         {
             other.gameObject.SetActive(false);
+            score = score + 1;
+            SetScoreText();
             count = count + 1;
-            SetCountText ();
+            SetCountText();
+        }
+
+        else if (other.gameObject.CompareTag("Enemy Pick Up"))
+        {
+            other.gameObject.SetActive(false);
+            score = score - 1;
+            SetScoreText();
         }
     }
 
     void SetCountText ()
     {
         countText.text = "Count: " + count.ToString();
-        if (count >= 12)
+        if (count == 12)
         {
-            winText.text = "You Win!";
+            winText.text = "Congratulations! You won with a score of " + score.ToString();
         }
+    }
+
+   void SetScoreText ()
+    {
+        scoreText.text = "Score: " + score.ToString();
     }
 }
